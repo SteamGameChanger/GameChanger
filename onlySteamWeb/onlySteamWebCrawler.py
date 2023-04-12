@@ -1,8 +1,10 @@
+import re
 import pandas as pd
 from bs4 import BeautifulSoup
 import urllib.request
 import time
 from selenium import webdriver
+
 
 # 반드시 확인!! 스팀 Kaggle 데이터 읽기  경로만 본인 환경에 맞게 재설정
 a_dataframe = pd.read_csv('../dataset/games.csv') 
@@ -69,12 +71,22 @@ def start_crawling(first_idx, fileSave):
     except AttributeError as e:
       print("리뷰가 없습니다.")
     ### 리뷰 부분 종료 ###
-
+    ### About This Game - Game Description 추출 시작 ###
+    try:
+      tag_about_this_game = SoupUrl.find('div', attrs={'id':'aboutThisGame'})
+      game_description = tag_about_this_game.find('div', attrs={'id':'game_area_description'}).get_text()
+      
+      pattern = r'(?<=About This Game).*'
+      g_des = re.findall(pattern, game_description, re.S)
+      game_description = g_des[0].strip()
+    except:
+      print("Game Description이 존재하지 않습니다.")
+    ### About This Game - Game Description 추출 끝 ###
     ### dataset 저장 시작 ###
-    steam_value = [overall_reviews] + [recent_reviews] + [metacritic_url] + [reviews_total]
+    steam_value = [overall_reviews] + [recent_reviews] + [metacritic_url] + [reviews_total] + [game_description]
     print(steam_value)
     result.append(steam_value)
-    Wcrawling_tbl = pd.DataFrame(result, columns=('Overall Reviews', 'Recent Reviews', 'Most Helpful Reviews', 'Currently popular'))
+    Wcrawling_tbl = pd.DataFrame(result, columns=('Overall Reviews', 'Recent Reviews', 'Most Helpful Reviews', 'Currently popular', 'Game Description'))
     try:
       Wcrawling_tbl.to_csv('../dataset/steamGameNo%d.csv' %(int(no)), encoding='UTF-8', mode='w', index=True)
     except UnicodeEncodeError as e:
@@ -86,17 +98,17 @@ def start_crawling(first_idx, fileSave):
 
 def main():
   #초기 실행 이후 주석 해제
-  # f = open("read.txt",'r')
-  # data = f.read()
-  # f.close()
-  # saveData = data.split(',')
-  # start_idx = int(saveData[0])
-  # fileSave = int(saveData[1])
+  f = open("read.txt",'r')
+  data = f.read()
+  f.close()
+  saveData = data.split(',')
+  start_idx = int(saveData[0])
+  fileSave = int(saveData[1])
   #
   
   #초기 실행 이후 주석 처리
-  start_idx = 0
-  fileSave = 0
+  # start_idx = 0
+  # fileSave = 0
   #
   start_crawling(start_idx, fileSave)
 
