@@ -6,7 +6,7 @@ import time
 from selenium import webdriver
 
 
-# 반드시 확인!! 스팀 Kaggle 데이터 읽기  경로만 본인 환경에 맞게 재설정
+# 반드시 확인!! 스팀 Kaggle 데이터 읽기 경로만 본인 환경에 맞게 재설정
 a_dataframe = pd.read_csv('../dataset/games.csv') 
 # AppID 속성 추출한 데이터프레임 총 70210 개
 game_no = a_dataframe['AppID']
@@ -35,6 +35,7 @@ def start_crawling(first_idx, fileSave):
     SoupUrl = BeautifulSoup(html, 'html.parser')
     ### URL 가져오기 끝 ###
 
+    overall_reviews, recent_reviews, metacritic_url, reviews_total, game_description = "", "", "", [], ""
     tag_name_overall_reviews = SoupUrl.find('div', attrs={'id':'review_histogram_rollup_section'}) # Overall Reviews 정보
     tag_name_recent_reviews = SoupUrl.find('div', attrs={'id':'review_histogram_recent_section'}) # Recent Reviews 정보
 
@@ -98,17 +99,17 @@ def start_crawling(first_idx, fileSave):
 
 def main():
   #초기 실행 이후 주석 해제
-  f = open("read.txt",'r')
-  data = f.read()
-  f.close()
-  saveData = data.split(',')
-  start_idx = int(saveData[0])
-  fileSave = int(saveData[1])
+  # f = open("read.txt",'r')
+  # data = f.read()
+  # f.close()
+  # saveData = data.split(',')
+  # start_idx = int(saveData[0])
+  # fileSave = int(saveData[1])
   #
   
-  #초기 실행 이후 주석 처리
-  # start_idx = 0
-  # fileSave = 0
+  #초기 실행 이후 주석 처리 / start_idx, fileSave 는 탐색을 시작할 인덱스 번호, 파일의 저장 수를 나타냅니다.
+  start_idx = 0
+  fileSave = 0
   #
   start_crawling(start_idx, fileSave)
 
