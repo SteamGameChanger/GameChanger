@@ -1,0 +1,374 @@
+@charset "UTF-8";
+
+/* ****************************************************************** 
+
+		Setting of: General pages
+			1: fonts styles
+			2: General setting
+			3: text setting
+			4: list setting
+			5: table setting
+			6: form setting
+			7: hacks setting
+			8: padding setting
+			9: margin setting
+			11:
+			12:
+			13:
+****************************************************************** */
+
+
+
+
+/*==================================================================
+	1: fonts styles
+===================================================================*/
+/* Font-Face */
+
+html, body, select {font-family:"나눔고딕",NanumGothic,"돋움",Dotum,Arial, AppleGothic,Tahoma ;font-size:12px;color:#666;}
+
+/* html,body,input {height:100%;font-family:"돋움", Dotum;font-size:12px;color:#666;} */
+
+
+/*==================================================================
+	2: General setting
+===================================================================*/
+a {
+	overflow:hidden; /* width:100% 방지*/
+	text-decoration:none;
+	color:#666;
+	}
+
+a:link, a:visited,a:hover, a:active{
+	color:#666;
+	}
+
+a.block {
+	display:inline-block;
+}
+
+a img{border:0;}
+
+
+/*==================================================================
+	3: text setting
+===================================================================*/
+strong,.bold {font-family: 'NanumGothicBold'!important; }
+.normal {font-weight:normal!important;}
+.font_style01 {font-weight:bold;text-decoration:underline;}
+.font_style02 {font-weight:bold;font-family:AppleGothic;font-size:25px;color:#000;}
+.font_style03 {font-family:AppleGothic;font-size:11px;color:#858585;}
+.font_style04 {font-family:AppleGothic;font-size:14px;color:#858585;font-weight:bold;}
+/*	size styles
+-------------------------------------------------------------------*/
+.f10 { font-size:10px!important; }  /*renders 10px */
+.f11 { font-size:11px!important; }  /*renders 11px */
+.f12 { font-size:12px!important; } /*renders 12px */
+.f13 { font-size:13px!important; } /*renders 13px */
+.f14 { font-size:14px!important; } /*renders 14px */
+.f15 { font-size:15px!important; } /*renders 15px */
+.f16 { font-size:16px!important; } /*renders 16px */
+.f20 { font-size:20px!important; } /*renders 20px */
+.f25 { font-size:25px!important; } /*renders 25px */
+
+/*	text-align styles
+-------------------------------------------------------------------*/
+.center	{ text-align: center!important; }
+.left {	text-align: left!important; }
+.right { text-align: right !important; }
+.middle { vertical-align: middle!important; }
+.top {vertical-align: top!important;}
+
+/*	text-line-height styles
+----------------------------------------*/
+.db_txt {line-height:1.5;}
+
+/*	color styles
+-------------------------------------------------------------------*/
+.blue {color:#468bca!important;}
+.blue02 {color:#1a659c!important;}
+.blue03 {color:#3670af!important;}
+.black {color:#000!important;}
+.gray {color:#9f9f9f!important;}
+.gray02 {color:#4c4c4c!important;}
+.brown {color:#7e4228!important;}
+.brown02 {color:#2f140c!important;}
+.white {color:#fff!important;}
+.orange {color:#ff5400!important;}
+
+/*==================================================================
+	4: list setting
+===================================================================*/
+
+
+/*	list style
+-------------------------------------------------------------------*/
+ul{
+	list-style:none;	
+}
+
+/*	inline list
+-------------------------------------------------------------------*/
+dl.inline dt,
+dl.inline dd,
+ol.inline li,
+ul.inline li{
+	display: -moz-inline-box;
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	vertical-align:top;
+	}
+
+/* float Styles
+-------------------------------------------------------------------*/
+.leftBox { float: left!important; }
+.rightBox{ float: right!important; }
+
+.clear{
+	clear:both;
+	}
+
+
+/*==================================================================
+	5: table setting
+===================================================================*/
+table{
+	empty-cells: show; /*깨짐방지*/
+	}
+
+table.sheet{
+	width:100%;
+	border-collapse:collapse;
+	border-spacing:0;
+	border-bottom: none;
+	margin-bottom:10px;
+	table-layout: fixed;/*웹표준 규정 : 크게 영향을 미치진 않음.*/
+	}
+
+.sheet caption {
+	display:none;
+	}
+
+.sheet th,
+.sheet td{
+	padding:10px 5px;
+	height:38px;
+	text-align: left;
+	background:url(/brus/images/common/table_bg_td.gif) repeat-x bottom center
+	}
+.sheet th{
+	font-family: 'NanumGothicBold';color:#e0e0e0
+	}
+.sheet td img{
+	vertical-align:middle;
+	}
+.sheet thead th{
+	font-family: 'NanumGothicBold';
+	line-height:1;
+	width:auto;
+	}
+
+
+/*==================================================================
+	6: form setting
+===================================================================*/
+form input{
+	line-height:1; 
+	}
+
+input[type="text"],
+input[type="password"]{
+		border:1px solid #8f7d6a;
+		height:21px;
+		line-height:21px; 
+		padding:0 10px; 
+		font-size:12px;
+		color:#666;
+		/*font-family:"돋움", Dotum;*/
+		vertical-align:middle;
+	}
+
+input.search_input[type="text"] {
+	height:27px;
+	line-height:24px;
+	vertical-align:middle;
+}
+input[type="checkbox"],
+input[type="radio"]{
+	vertical-align:middle;
+	}
+	
+input[type="button"]{
+		vertical-align:middle;
+	}
+textarea{
+
+	}
+select	{
+	vertical-align:middle;
+	border:1px solid #8f7d6a;
+	font-size:12px;
+	color:#666;
+	}
+select.search {vertical-align:middle;height:28px;padding:3px;border:1px solid #8f7d6a;}
+select.search02 {vertical-align:middle;height:23px;padding:2px;border:1px solid #8f7d6a;}
+input:focus,
+textarea:focus{
+
+	}
+
+form img,
+form input,	
+form select	{
+
+	}
+label {vertical-align:middle;}
+input[type="radio"],
+input[type="checkbox"] {
+	height:14px;
+	vertical-align:middle;
+}
+input[type="button"] {
+	cursor:pointer;
+}
+
+/*==================================================================
+	7: hacks setting
+===================================================================*/
+.clearfix {zoom:1;} /* ie6, ie7 때문에 */
+.clearfix:after{
+    content: ""; 
+    display: block; 
+    clear: both;
+	}
+	
+/*==================================================================
+	8: padding setting
+===================================================================*/
+
+.p0 {padding:0!important;}
+.p10 {padding:10px!important;}
+
+.pt1 {padding-top:1px!important;}
+.pt5 {padding-top:5px!important;}
+.pt10 {padding-top:10px!important;}
+.pt15 {padding-top:15px!important;}
+.pt20 {padding-top:20px!important;}
+.pt30 {padding-top:30px!important;}
+
+.pr30 {padding-right:30px!important;}
+
+.pb0 {padding-bottom:0px!important;}
+.pb1 {padding-bottom:1px!important;}
+.pb20 {padding-bottom:20px!important;}
+
+.pl1 {padding-left:1px!important;}
+.pl68 {padding-left:68px!important;}
+
+.pt50 {padding-top:50px!important;}
+
+
+/*==================================================================
+	9: margin setting
+===================================================================*/
+.m0 {margin:0!important;}
+.mt0 {margin-top:0!important;}
+.mt5 {margin-top:5px!important;}
+.mt7 {margin-top:7px!important;}
+.mt10{margin-top:10px!important;}
+.mt15 {margin-top:15px!important;}
+.mt19 {margin-top:19px!important;}
+.mt20 {margin-top:20px!important;}
+.mt23 {margin-top:23px!important;}
+.mt25 {margin-top:25px!important;}
+.mt30 {margin-top:30px!important;}
+.mt35 {margin-top:35px!important;}
+.mt38 {margin-top:38px!important;}
+.mt50 {margin-top:50px!important;}
+.mt-50 {margin-top:-20px!important;}
+.mt90 {margin-top:90px!important;}
+
+.mr20 {margin-right:20px!important;}
+
+.ml5 {margin-left:5px!important;}
+.ml10 {margin-left:10px!important;}
+.ml15 {margin-left:15px!important;}
+.ml25 {margin-left:25px!important;}
+.ml50 {margin-left:50px!important;}
+
+.mb1 {margin-bottom:1px!important;}
+.mb5 {margin-bottom:5px!important;}
+.mb10 {margin-bottom:10px!important;}
+.mb20 {margin-bottom:20px!important;}
+.mb30 {margin-bottom:30px!important;}
+.mb35 {margin-bottom:35px!important;}
+.mb50 {margin-bottom:50px!important;}
+.mb55 {margin-bottom:55px!important;}
+.mb70 {margin-bottom:70px!important;}
+
+/*===================================================================
+	10.cursor
+==================================================================*/
+.cursor {cursor:pointer;}
+
+/*===================================================================
+	11.last_child
+==================================================================*/
+.last_ch {margin-right:0!important;padding-right:0!important;background:none!important;}
+
+/*===================================================================
+	12.숨기는 라벨
+==================================================================*/
+.h_label {position:absolute;font-size: 0;height: 0;line-height: 0;visibility: hidden; width: 0;}
+
+
+/*===================================================================
+	13.skip
+==================================================================*/
+div#sckipNavi a{display: block; height: 0;overflow: hidden;}
+div#sckipNavi a:focus {border: 1px solid #CCCCCC;height: auto;padding: 10px;text-align: center;}
+
+
+/*===================================================================
+	14.page_view01
+==================================================================*/
+div.page_view01 {text-align:center;padding:20px 0 30px 0;}
+div.page_view01 a {display:inline-block;padding:6px 0 4px 0;width:20px;font-family: 'NanumGothicBold';text-align:center;}
+div.page_view01 a.on {border:1px solid #c4c4c4;color:#0146a2;}
+div.page_view01 a.btn_prev, div.page_view01 a.btn_next {font-weight:normal;width:55px;border:1px solid #c4c4c4;}
+div.page_view01 a.btn_prev {padding-left:10px;margin-right:15px;background:url("../images/bullet/arr_blue.gif") 10px 9px no-repeat;}
+div.page_view01 a.btn_next {padding-right:10px;margin-left:15px;background:url("../images/bullet/arr_blue02.gif") 48px 9px no-repeat;}
+
+/*===================================================================
+	14. 게시판 검색
+==================================================================*/
+div.board_search {text-align:center;vertical-align:middle;padding-bottom:5px;}
+div.board_search select {vertical-align:middle;height:28px;padding:3px;border-top:1px solid #a7a7a7;border-left:1px solid #a7a7a7;border-bottom:1px solid #d8d8d8;border-right:1px solid #d8d8d8;}
+*:first-child+html div.board_search select {vertical-align:middle;margin-top:3px;padding:0;}
+div.board_search input[type="text"] {vertical-align:middle;width:360px;height:26px;line-height:26px;border-top:1px solid #a7a7a7;border-left:1px solid #a7a7a7;border-bottom:1px solid #d8d8d8;border-right:1px solid #d8d8d8;}
+
+
+/*===================================================================
+	15. 버튼디자인
+==================================================================*/
+.bt_grad {margin-top:30px;height:24px;padding:7px 34px 0 34px;display:inline-block;background:url("../images/btn/btn_bg_grad.gif") repeat-x;font-size:15px;font-family: 'NanumGothicBold';color:#767676!important;border:1px solid #a0a0a0;vertical-align:top;letter-spacing:-1px;}
+input.bt_grad {padding:0 34px;vertical-align:top;height:33px;letter-spacing:-1px;display:inline-block;background:url("../images/btn/btn_bg_grad.gif") repeat-x;font-size:15px;font-family: 'NanumGothicBold';color:#767676!important;border:1px solid #a0a0a0;vertical-align:top;}
+*:first-child+html input.bt_grad {}
+
+.bt_gray {letter-spacing:-1px;cursor:pointer;display:inline-block;vertical-align:middle;padding:8px 13px 7px 13px;font-family: 'NanumGothicBold';color:#fff!important;background:#9d9d9d;font-size:12px;text-align:center;}
+input.bt_gray {letter-spacing:-1px;padding:6px 13px 5px 13px;*min-width:50px;}
+.bt_gray02 {letter-spacing:-1px;cursor:pointer;display:inline-block;vertical-align:middle;padding:5px 13px 4px 13px;font-family: 'NanumGothicBold';color:#fff!important;background:#9d9d9d;font-size:12px;*width:60px;text-align:center;}
+input.bt_gray02 {letter-spacing:-1px;padding:4px 12px 3px 12px;text-align:center;*width:50px;}
+
+.bt_brown {letter-spacing:-1px;padding:7px 28px 6px 28px;display:inline-block;font-size:15px;font-family: 'NanumGothicBold';color:#fff!important;background:url("../images/btn/btn_bg_brown.gif") #4c2616 right top no-repeat;text-align:center;vertical-align:middle;border:1px solid #3c1b05;}
+.bt_brown02 {height:28px;vertical-align:middle;letter-spacing:-1px;padding:4px 28px;display:inline-block;font-size:15px;font-family: 'NanumGothicBold';color:#fff!important;background:#522b1a;text-align:center;}
+.bt_brown03 {letter-spacing:-1px;padding:7px 28px 6px 28px;display:inline-block;font-size:15px;font-family: 'NanumGothicBold';color:#fff!important;background:url("../images/btn/btn_bg_brown.gif") #4c2616 right top no-repeat;text-align:center;vertical-align:middle;border:1px solid #3c1b05; margin-top:30px;}
+.bt_gray03 {letter-spacing:-1px;padding:8px 28px;display:inline-block;font-size:15px;font-family: 'NanumGothicBold';color:#fff!important;background:#878787;text-align:center;}
+.bt_gray04 {letter-spacing:-1px;padding:8px;display:inline-block;font-size:13px;font-family: 'NanumGothicBold';color:#fff!important;background:#878787;text-align:center;} 
+
+/*===================================================================
+	16. 대체텍스트
+==================================================================*/
+.alternative { width:1px;height:1px;overflow:hidden;position:absolute;visibility:hidden; }
+.line_2 {margin-top:5px;}
