@@ -43,12 +43,6 @@ class DoKeyBERT:
         self.doc_embedding = None
         self.candidate_embeddings = None
 
-        """
-        top_n = [5, 10]
-        nr_candidates = [10, 20]
-        diversity = [0.2, 0.5, 0.7]
-        """
-
     def vectorize(self):
         self.count = CountVectorizer(ngram_range=self.n_gram_range, stop_words=self.stop_words).fit([self.doc])
         self.candidates = self.count.get_feature_names_out()
@@ -80,7 +74,10 @@ class DoKeyBERT:
                 candidate = combination
                 min_sim = sim
 
-        return [words_vals[idx] for idx in candidate]
+        if candidate == None:
+            return []
+        else:
+            return [words_vals[idx] for idx in candidate]
 
     def mmr(self, top_n, diversity):
         words = self.candidates
@@ -122,12 +119,6 @@ class DoKeyBERT:
         self.vectorize()
         self.embed()
 
-        # Call max_sum_sim and mmr functions
-        print("Max Sum Similarity Keywords for top_n={}, nr_candidates={}".format(top_n, nr_candidates))
-        print(self.max_sum_sim(top_n, nr_candidates))
-        print("MMR Keywords for top_n={}, diversity={}".format(top_n, diversity))
-        print(self.mmr(top_n, diversity))
-
         return self.max_sum_sim(top_n, nr_candidates) + self.mmr(top_n, diversity)
 
 # XLNet----------------------------------------
@@ -161,15 +152,9 @@ def remove_stopwords(sentence):
 def preprocess_text(text):
     # 특수 문자 제거
     text = re.sub(r'[^\w\s]', ' ', text)
-
     return text
 
 def extract_keywords(text, top_k=30):
-
-    text = remove_stopwords(text)
-    text = preprocess_text(text)
-
-    print("After Proprocessing: \n",text, '\n')
 
     # XLNet tokenizer 및 모델 로드
     tokenizer = AutoTokenizer.from_pretrained("xlnet-base-cased")
@@ -193,12 +178,7 @@ def extract_keywords(text, top_k=30):
     with torch.no_grad():
         outputs = model(input_ids=input_ids,attention_mask=attention_mask)
         last_hidden_state = outputs.last_hidden_state 
-    '''
-    # XLNet 모델 실행
-    with torch.no_grad():
-        outputs = model(input_ids=input_ids)
-        last_hidden_state = outputs.last_hidden_state
-    '''
+
     # 키워드 추출
     # last_hidden_state[0].mean(dim=1) : 각 문장의 임베딩 벡터들을 평균화한 하나의 벡터 (해당 문장의 전체 문맥을 나타내는 벡터)
     #  ~.indices:  가장 큰 top_k개의 값들의 인덱스를 나타내는 텐서 (가장 중요한 토큰들의 위치를 확인할 수 있음)
@@ -207,57 +187,18 @@ def extract_keywords(text, top_k=30):
 
     return keywords
 
-### 페이지 랜더링 리스트 
-#  텍스트 입력 페이지(index.html) 
-# 유사 게임 찾기 & 주요 키워드 찾기 결과 출력 페이지(result.html)
-# 추후에 GET, POST 분기 작성
-@app.route('/', methods=['GET', 'POST']) 
-def index():
-    return render_template("index.html")
-
-@app.route('/result', methods=['GET','POST'])
-def find():
-
-    doc = request.form['text']
-    # keybert--------------------------=====
-    keyBERT = DoKeyBERT(doc, n_gram_range)
-    top_n = 10
-    nr_candidates = 20
-    diversity = 0.5
-    result = keyBERT.run(top_n, nr_candidates, diversity)
-
-    # XLNet --------------------------------
-
-    # 키워드
-    final_key = []
-
-
-    try: text_split, i = preprocess_text(doc).split(' '), 0
-    except: text_split = doc
-
-    while i < len(text_split):
-        try:
-            n = int(text_split[i][0])
-            if len(text_split[i]) == 4: # 년도일 가능성 높음
-                final_key.append(text_split[i])
-                i += 1
-            elif len(text_split[i+1]) > 2:
-                final_key.append(text_split[i].lower() +' '+ text_split[i+1].lower())
-            i += 2
-        except:
-            i += 1
-
-
-
+def get_XLNet_result(top_k, doc, final_key_XL,text_split):
+    
     # 추출하기 & 단어만 골라내기
-    top_k = 30
-    while(True): # 만약 top_k개 뽑아낼 수 없는 경우 top_k를 줄여가며 시도
+    top_k = 40  
+    while(top_k > 0): # 만약 top_k개 뽑아낼 수 없는 경우 top_k를 줄여가며 시도
         if doc == 'nan': break
         try: 
             keywords_extracted = set(extract_keywords(doc, top_k))
             break
         except:
             top_k -= 5
+
 
 
     # XLNet 토크나이'▁' 때문에 명사 처럼 여겨지는 경우가 있어 처리
@@ -277,40 +218,111 @@ def find():
     # 명사, 형용사만 골라내기
     only_nORj = [] 
     for word, pos in tokens_pos:
-        if 'NN' in pos  or 'JJ' in pos:
+        if 'NN' in pos or 'JJ' in pos:
             w_lower = word.lower() # 소문자로 통일
             for gl in genres_lower: # 장르 관련 키워드면 무조건 포함
                 if gl in w_lower:
-                    final_key.append(w_lower)
+                    final_key_XL.append(w_lower)
                 else: only_nORj.append(w_lower)
 
     only_nORj = set(only_nORj)
     # 여러 조건들에 맞춰 해당하는 것만 뽑아내기
     for w in only_nORj:
         if len(w) <= 3: continue # 3글자 이하 제거
-        if w[-1] == 's' : # 끝에 s가 붙는 경우 s제거
-            w = w[:-1]
-        if ('game' in w) or ('thing' in w) or (w =='play') or w == 'fea': continue
-        append_bool = True
-        for k in final_key:
+        if ('game' in w) or ('thing' in w) or (w =='play') or ('one' in w):
+            continue
+
+        append_bool = True # 포함시킬지 여부를 결정하는 변수
+        for k in final_key_XL: # 이미 있거나 유사한 단어 있으면 포함 시키지 말기
             if w in k:
                 append_bool = False
                 break
-        if append_bool: final_key.append(w)
+        if append_bool:
+            for k in text_split: # 잘리는 단어 보정
+                if w in k:
+                    final_key_XL.append(k)
+                    break
 
-    print('\n\nKEY WORDS : ',set(final_key))
+    return final_key_XL
+    
 
-    #result += set(final_key)
+##################################################
+@app.route('/', methods=['GET', 'POST']) 
+def index():
+    return render_template("index.html")
 
-    XL_result = ''
-    for k in set(final_key):
-        XL_result += k + '//'
-    Bert_result = ''
-    for k in result:
-        Bert_result += k + '//'
+@app.route('/result', methods=['GET','POST'])
+def find():
 
-    # --------------------------------------
-    return render_template("result.html", text=doc, XL_result=XL_result,Bert_result = Bert_result)
+    doc = request.form['text']
+
+    # keybert--------------------------=====
+    try:
+        keyBERT = DoKeyBERT(doc, n_gram_range)
+        top_n = 10
+        nr_candidates = 20
+        diversity = 0.5
+        final_key_Bert = keyBERT.run(top_n, nr_candidates, diversity)
+    except:
+        final_key_Bert = []
+
+    # XLNet --------------------------------
+
+    # 키워드
+    final_key_XL = []
+
+
+    try: text_split, i = str(preprocess_text(doc)).split(' '), 0
+    except: text_split = doc
+
+    while i < len(text_split):
+        try:
+            n = int(text_split[i][0])
+            if len(text_split[i]) == 4: # 년도일 가능성 높음
+                final_key_XL.append(text_split[i])
+                i += 1
+            elif len(text_split[i+1]) > 2:
+                tagged_word1 = nltk.pos_tag([text_split[i+1]])
+                tagged_word2 = nltk.pos_tag([text_split[i+2]])
+                print('\n',text_split[i+1], tagged_word2[0][1])
+                if (tagged_word1[0][1].startswith('JJ') or tagged_word1[0][1].startswith('RB') or tagged_word1[0][1].startswith('NN')) and not( tagged_word2[0][1].startswith('RB') or tagged_word2[0][1].startswith('TO') or tagged_word2[0][1].startswith('CC') or tagged_word2[0][1].startswith('IN')):
+                    final_key_XL.append(text_split[i].lower() +' '+ text_split[i+1].lower() + ' ' + text_split[i+2].lower())
+                    i += 3
+                else:
+                    final_key_XL.append(text_split[i].lower() +' '+ text_split[i+1].lower())
+                    i += 2
+            else:
+                i += 1
+        except:
+            i += 1
+
+    final_key_XL2 = final_key_XL.copy()
+    
+    top_k = 40
+    
+    final_key_XL = get_XLNet_result(top_k, doc, final_key_XL,text_split)
+    
+    doc = remove_stopwords(doc)
+    doc = preprocess_text(doc)
+    final_key_XL2 = get_XLNet_result(top_k, doc, final_key_XL2,text_split)
+
+    final_key_XL += final_key_XL2
+
+    final_key_XL = set(final_key_XL)
+    final_key_Bert = set(final_key_Bert) 
+    
+    # 화면에 출력할 형태
+    if len(final_key_XL) == 0 and len(final_key_Bert) == 0:
+        return render_template("result.html", text=doc, XL_result="Please tell us in more detail ...",Bert_result = "Please tell us in more detail ...")
+    else:
+        XL_result = ''
+        for k in final_key_XL:
+            XL_result += k + '//'
+        Bert_result = ''
+        for k in final_key_Bert:
+            Bert_result += k + '//'
+
+        return render_template("result.html", text=doc, XL_result=XL_result,Bert_result = Bert_result)
 
 if __name__=="__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
