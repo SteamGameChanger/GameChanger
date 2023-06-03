@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 
 # keybert ------------------------------------------------
 import itertools
@@ -23,6 +23,12 @@ import operator
 nltk.download('stopwords')
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
+# similar game --------------------------------------------
+import os
+import pickle
+from scipy.sparse import load_npz
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 # ---------------------------------------------------------
 
 app = Flask(__name__)
@@ -138,10 +144,12 @@ if torch.cuda.is_available():
 else:
     device = torch.device("cpu")
 
+stop_words = set(stopwords.words('english'))
+
 def remove_stopwords(sentence):
     # 불용어 제거 
-    stopwords = nltk.corpus.stopwords.words('english')
-    stop_words = set(stopwords)
+    #stopwords = stopwords.words('english')
+    #stop_words = set(stopwords)
     words = word_tokenize(sentence)
 
     filtered_words = [word for word in words if word.casefold() not in stop_words]
@@ -244,11 +252,48 @@ def get_XLNet_result(top_k, doc, final_key_XL,text_split):
                     break
 
     return final_key_XL
-    
+
+# similar games -------------------------------------------------------
+
+
+# --------------------------------------------------
+
+# Define a function for preprocessing
+def preprocess_text(text):
+    result = []
+    word_tokens = word_tokenize(text)
+    for word in word_tokens:
+        word = re.sub('[^a-zA-Z0-9]', '', word).strip()
+        if word not in stop_words:
+            result.append(word)
+    return ' '.join(result)
 
 ##################################################
+
 @app.route('/', methods=['GET', 'POST']) 
 def index():
+
+    global tfidf_matrix_reviews, tfidf_matrix_descriptions, df, vectorizer_reviews, vectorizer_descriptions
+    
+    data_path = os.path.join(app.static_folder,'data/combined_data_for_similar_game_finder_merged.csv')
+
+    npz_desc_path = os.path.join(app.static_folder, 'npz/tfidf_matrix_descriptions.npz')
+    npz_reviews_path = os.path.join(app.static_folder, 'npz/tfidf_matrix_reviews.npz')
+
+    pickle_desc_path = os.path.join(app.static_folder, 'pickle/vectorizer_descriptions.pickle')
+    pickle_reviews_path = os.path.join(app.static_folder, 'pickle/vectorizer_reviews.pickle')
+
+    tfidf_matrix_reviews = load_npz(npz_reviews_path)
+    tfidf_matrix_descriptions = load_npz(npz_desc_path)
+
+    df = pd.read_csv(data_path, encoding='cp949')
+
+    with open(pickle_reviews_path, 'rb') as f:
+        vectorizer_reviews = pickle.load(f)
+
+    with open(pickle_desc_path, 'rb') as f:
+        vectorizer_descriptions = pickle.load(f)
+        
     return render_template("index.html")
 
 @app.route('/result', methods=['GET','POST'])
@@ -284,7 +329,6 @@ def find():
             elif len(text_split[i+1]) > 2:
                 tagged_word1 = nltk.pos_tag([text_split[i+1]])
                 tagged_word2 = nltk.pos_tag([text_split[i+2]])
-                print('\n',text_split[i+1], tagged_word2[0][1])
                 if (tagged_word1[0][1].startswith('JJ') or tagged_word1[0][1].startswith('RB') or tagged_word1[0][1].startswith('NN')) and not( tagged_word2[0][1].startswith('RB') or tagged_word2[0][1].startswith('TO') or tagged_word2[0][1].startswith('CC') or tagged_word2[0][1].startswith('IN')):
                     final_key_XL.append(text_split[i].lower() +' '+ text_split[i+1].lower() + ' ' + text_split[i+2].lower())
                     i += 3
@@ -322,7 +366,20 @@ def find():
         for k in final_key_Bert:
             Bert_result += k + '//'
 
-        return render_template("result.html", text=doc, XL_result=XL_result,Bert_result = Bert_result)
+    # similar games ------------------------------------------
+
+    user_input_vector = vectorizer_reviews.transform([preprocess_text(doc)])
+
+    cosine_similarities = cosine_similarity(user_input_vector, tfidf_matrix_reviews)
+
+    top_indices = np.argsort(cosine_similarities[0])[-5:]
+    top_indices = top_indices[::-1]
+
+    similar_games = ''
+    for idx in top_indices:
+        similar_games += 'ID : ' + str(df.iloc[idx]['AppID']) + ' // Name : ' + df.iloc[idx]['Name'] + ' // Description : ' + df.iloc[idx]['Game Description'] + '\n'
+
+    return render_template("result.html", text=doc, XL_result=XL_result,Bert_result = Bert_result, similar_games=similar_games)
 
 if __name__=="__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
