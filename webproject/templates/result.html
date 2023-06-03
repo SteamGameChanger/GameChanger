@@ -1,109 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <!-- Primary Meta Tags -->
+<head>
+    <meta charset="UTF-8">
     <title>final result</title>
-    <!-- Fontawesome -->
-    <link
-      type="text/css"
-      href="../static/vendor/@fortawesome/fontawesome-free/css/all.min.css"
-      rel="stylesheet"
-    />
-    <!-- Main CSS -->
-    <link type="text/css" href="../static/css/spaces.css" rel="stylesheet" />
-  </head>
-
-  <body>
-    <header class="header-global">
-      <nav
-        id="navbar-main"
-        class="navbar navbar-main navbar-theme-primary navbar-expand-lg headroom py-lg-3 px-lg-6 navbar-dark navbar-transparent navbar-theme-primary"
-      >
-        <div class="container">
-          <a class="navbar-brand @@logo_classes" href="/">
-            <div class="d-none d-lg-block @@cta_button_classes">
-              <a href="/" class="btn btn-md btn-outline-white animate-up-2 mr-3"
-                ><span class="d-none d-xl-inline">GAMECHANGER</span></a
-              >
-            </div>
-          </a>
-          <div class="navbar-collapse collapse" id="navbar_global">
-            <div class="navbar-collapse-header">
-              <div class="row">
-                <div class="col-6 collapse-brand">
-                  <a href="./index.html">
-                    <img
-                      src="../static/assets/img/brand/dark.svg"
-                      height="35"
-                      alt="Logo Impact"
-                    />
-                  </a>
-                </div>
-                <div class="col-6 collapse-close">
-                  <a
-                    href="#navbar_global"
-                    role="button"
-                    class="fas fa-times"
-                    data-toggle="collapse"
-                    data-target="#navbar_global"
-                    aria-controls="navbar_global"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                  ></a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="d-flex d-lg-none align-items-center">
-            <button
-              class="navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target="#navbar_global"
-              aria-controls="navbar_global"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          </div>
-        </div>
-      </nav>
-    </header>
-
-    <main>
-      <section class="section section-lg bg-soft" style="padding-bottom: 30%">
-        <div class="container">
-          <div class="row justify-content-center mb-4 mb-lg-5">
-            <div class="col-12 col-md-8 text-center">
-              <h1><span class="font-weight-bold">Result</span></h1>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <div class="card p-md-2">
-                <div class="card-body p-2 p-md-0">
-                  <h1>Key Words</h1>
-                  <p style = "padding-bottom: 20px;"><h2>Your Input: </h2>{{ text }}</p>
-                  <p style ="padding-bottom: 20px;"><h2>Key Words from KeyBert: </h2>{{ Bert_result }}</p>
-                  <p style="padding-bottom: 20px;"><h2>Key Words from XLNet: </h2>{{ XL_result }}</p>
-                  <div style="margin-bottom: 20px;"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="footer pb-5 bg-primary text-white pt-9 mt-n9">
-      <p
-        class="font-weight-normal font-small mb-0"
-        style="text-align: center; padding-bottom: 10px;"
-      >
-        Copyright @ HUFS BIG DATA TEAM 4
-      </p>
-    </footer>
-  </body>
+</head>
+<body>
+    <h1>Key Words</h1>
+    <p>Your Input: {{ text }}</p>
+    <p>Key Words from KeyBert: {{ Bert_result }}</p>
+    <p>Key Words from XLNet: {{ XL_result }}</p>
+    <p>The 5 most similar games to your input are: {{ similar_games }}</p>
+</body>
 </html>
