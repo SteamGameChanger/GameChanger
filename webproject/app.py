@@ -29,7 +29,12 @@ import pickle
 from scipy.sparse import load_npz
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-# ---------------------------------------------------------
+# price recommend ---------------------------------------------------------
+import joblib
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+import os
+#-----------------------------------------------------------
 
 app = Flask(__name__)
 
@@ -270,11 +275,11 @@ def preprocess_text(text):
 
 ##################################################
 
+
 @app.route('/', methods=['GET', 'POST']) 
 def index():
 
     global tfidf_matrix_reviews, tfidf_matrix_descriptions, df, vectorizer_reviews, vectorizer_descriptions
-    
     data_path = os.path.join(app.static_folder,'data/combined_data_for_similar_game_finder_merged.csv')
 
     npz_desc_path = os.path.join(app.static_folder, 'npz/tfidf_matrix_descriptions.npz')
@@ -293,7 +298,8 @@ def index():
 
     with open(pickle_desc_path, 'rb') as f:
         vectorizer_descriptions = pickle.load(f)
-        
+
+
     return render_template("index.html")
 
 @app.route('/result', methods=['GET','POST'])
@@ -354,17 +360,18 @@ def find():
 
     final_key_XL = set(final_key_XL)
     final_key_Bert = set(final_key_Bert) 
-    
+
     # 화면에 출력할 형태
     if len(final_key_XL) == 0 and len(final_key_Bert) == 0:
         return render_template("result.html", text=doc, XL_result="Please tell us in more detail ...",Bert_result = "Please tell us in more detail ...")
     else:
-        XL_result = ''
+        # 출력 list로 
+        XL_result = []
         for k in final_key_XL:
-            XL_result += k + '//'
-        Bert_result = ''
+            XL_result.append(k)
+        Bert_result = []
         for k in final_key_Bert:
-            Bert_result += k + '//'
+            Bert_result.append(k)
 
     # similar games ------------------------------------------
 
@@ -375,11 +382,27 @@ def find():
     top_indices = np.argsort(cosine_similarities[0])[-5:]
     top_indices = top_indices[::-1]
 
-    similar_games = ''
+    similar_games = []
     for idx in top_indices:
-        similar_games += 'ID : ' + str(df.iloc[idx]['AppID']) + ' // Name : ' + df.iloc[idx]['Name'] + ' // Description : ' + df.iloc[idx]['Game Description'] + '\n'
+        tmp = 'ID : ' + str(df.iloc[idx]['AppID']) + ' Name : ' + df.iloc[idx]['Name'] + '  Description : ' + df.iloc[idx]['Game Description']
+        similar_games.append(tmp)
 
-    return render_template("result.html", text=doc, XL_result=XL_result,Bert_result = Bert_result, similar_games=similar_games)
+    # price recommend --------------------------------------------
+
+    vectorizer_path = 'static/pickle/tfidf_vectorizer.pkl'
+    model_path = 'static/pickle/xgb_model.pkl'
+    vectorizer = joblib.load(vectorizer_path)
+    model = joblib.load(model_path)
+
+    # Transform the description into a format suitable for the model
+    transformed_description = vectorizer.transform([preprocess_text(doc)])
+
+    # Predict and return the price
+    predicted_price = round(model.predict(transformed_description)[0], 2)
+
+    return render_template("result.html", text=doc, XL_result=XL_result,Bert_result = Bert_result, similar_games=similar_games, predicted_price = predicted_price)
+
+
 
 if __name__=="__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

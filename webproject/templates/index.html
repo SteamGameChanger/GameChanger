@@ -13,6 +13,33 @@
 <link type="text/css" href="../static/css/spaces.css" rel="stylesheet">
 
 </head>
+<style>
+    /* page-loading */
+  #loading {
+     width: 100%;
+     height: 100%;
+     top: 0;
+     position: fixed;
+     display: block;
+     opacity: 0.6;
+     background: #e4e4e4;
+     z-index: 99;
+     text-align: center;
+  }
+
+  #loading > img {
+     position: absolute;
+     top: 30%;
+     left: 45%;
+     z-index: 100;
+  }
+   #loading > p {
+       position: absolute;
+       top: 50%;
+       left: 55%;
+       z-index: 101;
+    }
+</style>
 
 <body>
     <header class="header-global">
@@ -77,146 +104,22 @@
                                         <label for="text"><h5 style="color: black;">게임에 대한 설명을 해주세요! </h5></label><br>
                                         <textarea id="text" name="text" rows="20" cols="128" placeholder="내용 입력" required></textarea><br>
                                     
-                                        <input type="submit" class="btn-primary" value="제출" onclick="commit()">
+                                        <input type="submit" class="btn-primary" id="lodingBtn" value="제출" onclick="commit()">
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
+            </div>
+            <div id="loading" style="margin-left: 0px;">
+                <img src="https://www.railtrip.co.kr/image/loading2.gif">
+                <p>Loading..</p>
             </div>
         </section>
-        <!-- Section -->
-        <section class="section section-lg bg-soft">
-            <div class="container">
-                <div class="row justify-content-center mb-4 mb-lg-5">
-                    <div class="col-12 col-md-8 text-center">
-                        <h2 class="h1"><span class="font-weight-bold">How</span> it works?</h2>
-                        <p class="lead mt-3">어떻게 작동하는지 서술</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-10 col-lg-6 mx-auto">
-                        <!-- Tab -->
-                        <div class="nav-wrapper">
-                            <ul class="nav nav-pills nav-fill flex-column flex-sm-row mb-lg-4 mb-0" id="tab-32" role="tablist">
-                                <li class="nav-item mr-0 mr-sm-2 mr-md-0 mb-3 mb-lg-0">
-                                    <a class="nav-link flex-sm-fill text-sm-center active" id="tab-find-space" data-toggle="tab"
-                                        href="#find-space" role="tab" aria-controls="find-space" aria-selected="true"><span class="far fa-building mr-2"></span>Select 1</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link flex-sm-fill text-sm-center" id="tab-submit-space" data-toggle="tab" href="#submit-space"
-                                        role="tab" aria-controls="submit-space" aria-selected="false"><span class="far fa-money-bill-alt mr-2"></span>Select 2</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- End of Tab Nav -->
-                    </div>
-                    <div class="col-12">
-                        <!-- Tab Content -->
-                        <div class="tab-content mt-lg-5" id="tabcontentexample-3">
-                            <div class="tab-pane fade show active" id="find-space" role="tabpanel" aria-labelledby="tab-find-space">
-                                <div class="row">
-                                    <div class="col-12 col-md-6 col-lg-4">
-                                        <div class="card border-light mb-4 mb-lg-0 text-center">
-                                            <div class="card-body p-4 px-xl-4 py-xl-6">
-                                                <div class="icon icon-shape icon-lg icon-shape-primary mb-4 rounded-circle">
-                                                    <span class="fas fa-map-pin"></span>
-                                                </div>
-                                                <h3 class="h5 my-3">설명란</h3>
-                                                <p>설명란</p>
-                                            </div>
-                                        </div>
-                                        <!-- End of Icon box -->
-                                    </div>
-                                    <div class="col-12 col-md-6 col-lg-4">
-                                        <div class="card border-light mb-4 mb-lg-0 text-center">
-                                            <div class="card-body p-4 px-xl-4 py-xl-6">
-                                                <div class="icon icon-shape icon-lg icon-shape-primary mb-4 rounded-circle">
-                                                    <span class="far fa-calendar-check"></span>
-                                                </div>
-                                                <h3 class="h5 my-3">설명란</h3>
-                                                <p>설명란</p>
-                                            </div>
-                                        </div>
-                                        <!-- End of Icon box -->
-                                    </div>
-                                    <div class="col-12 col-md-6 col-lg-4">
-                                        <div class="card border-light mb-4 mb-lg-0 text-center">
-                                            <div class="card-body p-4 px-xl-4 py-xl-6">
-                                                <div class="icon icon-shape icon-lg icon-shape-primary mb-4 rounded-circle">
-                                                    <span class="fas fa-mouse-pointer"></span>
-                                                </div>
-                                                <h3 class="h5 my-3">설명란</h3>
-                                                <p>설명란</p>
-                                            </div>
-                                        </div>
-                                        <!-- End of Icon box -->
-                                    </div>    
-                                </div>
-                                <div class="col mt-lg-6 mt-3 text-center">
-                                    <a href="./all-spaces.html" class="btn btn-primary animate-up-2"><i class="fas fa-search-location mr-2"></i>Find a Location</a>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="submit-space" role="tabpanel" aria-labelledby="tab-submit-space">
-                                <div class="row">
-                                    <div class="col-12 col-lg-4">
-                                        <div class="card border-light mb-4 mb-lg-0 text-center">
-                                            <div class="card-body p-3 px-xl-4 py-xl-6">
-                                                <div class="icon icon-shape icon-lg icon-shape-secondary mb-4 rounded-circle">
-                                                    <span class="fas fa-clipboard-list"></span>
-                                                </div>
-                                                <h3 class="h5 my-3">설명란</h3>
-                                                <p>설명란</p>
-                                            </div>
-                                        </div>
-                                        <!-- End of Icon box -->
-                                    </div>
-                                    <div class="col-12 col-lg-4">
-                                        <div class="card border-light mb-4 mb-lg-0 text-center">
-                                            <div class="card-body p-3 px-xl-4 py-xl-6">
-                                                <div class="icon icon-shape icon-lg icon-shape-secondary mb-4 rounded-circle">
-                                                    <span class="far fa-user"></span>
-                                                </div>
-                                                <h3 class="h5 my-3">설명란</h3>
-                                                <p>설명란</p>
-                                            </div>
-                                        </div>
-                                        <!-- End of Icon box -->
-                                    </div>
-                                    <div class="col-12 col-lg-4">
-                                        <div class="card border-light mb-4 mb-lg-0 text-center">
-                                            <div class="card-body p-3 px-xl-4 py-xl-6">
-                                                <div class="icon icon-shape icon-lg icon-shape-secondary mb-4 rounded-circle">
-                                                    <span class="far fa-money-bill-alt"></span>
-                                                </div>
-                                                <h3 class="h5 my-3">설명란</h3>
-                                                <p>설명란</p>
-                                            </div>
-                                        </div>
-                                        <!-- End of Icon box -->
-                                    </div>
-                                </div>
-                                <div class="col mt-6 text-center">
-                                    <a href="./submit-item.html"  class="btn btn-secondary animate-up-2"><i class="fas fa-plus mr-2"></i>List a Space</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-       
-        
     </main>
-
-    
 </div>
-
-<footer class="footer pb-5 bg-primary text-white pt-9 mt-n9">
-    <p class="font-weight-normal font-small mb-0" style="text-align: center; padding-bottom: 10px;">Copyright @ HUFS BIG DATA TEAM 4
-</footer>
 
 <!-- Core -->
 <script src="../static/vendor/jquery/dist/jquery.min.js"></script>
@@ -224,7 +127,26 @@
 <script src="../static/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="../static/vendor/headroom.js/dist/headroom.min.js"></script>
 <script src="../static/vendor/onscreen/dist/on-screen.umd.min.js"></script>
+<script>
+    $(document).ready(function() {
 
+    $('#loading').hide();
+    $('#lodingBtn').click(function(){
+        $('#loading').show();
+        console.log("실행중")
+        setTimeout(" $('#loading').hide()", 20000); 
+        console.log("실행끝")
+        setTimeout("ozit_timer_test()", 20000);           
+        return true;
+        });
+    });
+
+
+    function ozit_timer_test(){
+      var link = '../result/';
+      location.href=link;
+    };
+</script>
 
 <!-- Spaces custom Javascript -->
 <script src="../static/assets/js/spaces.js"></script>
