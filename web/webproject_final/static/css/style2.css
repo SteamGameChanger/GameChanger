@@ -1,0 +1,52 @@
+body {
+    background-color: #21526D;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    margin-top: -20px;
+    
+}
+
+.result-container {
+    background-color: #f2f2f2;
+    padding: 40px;
+    border-radius: 10px;
+    margin: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.keyword-section,
+.similar-games-section,
+.recommended-price-section {
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 25px;
+    font-weight: bold;
+    color: #21526D;
+    margin-bottom: 10px;
+}
+
+.image-button {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    cursor: pointer;
+}
+
+
+.image-button img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.image-button:hover img {
+    transform: scale(1.1);
+}
