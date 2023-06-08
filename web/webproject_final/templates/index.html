@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>GameChanger</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <!-- Fontawesome -->
+    <link type="text/css" href="../static/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+
+</head>
+<style>
+    /* page-loading */
+    #loading {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        position: fixed;
+        display: block;
+        opacity: 0.6;
+        background: #e4e4e4;
+        z-index: 99;
+        text-align: center;
+    }
+
+    #loading>img {
+        position: absolute;
+        top: 30%;
+        left: 45%;
+        z-index: 100;
+    }
+
+    #loading>p {
+        font-weight:bold;
+        position: absolute;
+        top: 50%;
+        left: 49%;
+        z-index: 101;
+    }
+
+</style>
+
+<body>
+    <header>
+        <button class="image-button" onclick="location.href='./index.html'">
+            <div class="image-wrapper">
+                <img src="../static/assets/img/logo.png" alt="이미지 버튼">
+            </div>
+        </button>
+    </header>
+    <div class="query-idea">
+        <h1>Enter game ideas</h1>
+        <p>If you enter a description of your game, we will let you know the interesting results</p>
+    </div>
+
+    <main>
+
+        <form autocomplete="off" method="post" action="/result">
+            <div class="description">
+            </div>
+            <div class="input-container">
+                <br>
+                <textarea id="text" name="text" rows="20" cols="128" placeholder="What's your idea?..." required></textarea><br>
+
+                <input id="lodingBtn" type="submit" class="btn-primary" value="submit" onclick="commit()">
+            </div>
+        </form>
+
+    </main>
+    <div id="loading" style="margin-left: 0px;">
+            <img src="https://www.railtrip.co.kr/image/loading2.gif">
+            <p>Loading..</p>
+    </div>
+    <!-- Core -->
+    <script src="../static/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="../static/vendor/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../static/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../static/vendor/headroom.js/dist/headroom.min.js"></script>
+    <script src="../static/vendor/onscreen/dist/on-screen.umd.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            $('#loading').hide();
+            $('#lodingBtn').click(function() {
+                $('#loading').show();
+                console.log("실행중")
+                setTimeout(" $('#loading').hide()", 60000);
+                console.log("실행끝")
+                setTimeout("ozit_timer_test()", 60000);
+                return true;
+            });
+        });
+
+
+        function ozit_timer_test() {
+            var link = '../result/';
+            location.href = link;
+        };
+
+    </script>
+
+</body>
+
+</html>

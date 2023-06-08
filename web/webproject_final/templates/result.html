@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Changer - Results</title>
+    <link rel="stylesheet" href="../static/css/style2.css" />
+  </head>
+  <style>
+    #upperBox {
+      display: flex;
+      width: auto;
+      height: auto;
+    }
+
+    .cont {
+      /*display: flex;*/
+      width: auto;
+      height: auto;
+    }
+
+    #Bigbox1 {
+      width: auto;
+      /* 각 박스의 너비 */
+      height: auto;
+      /* 각 박스의 높이 */
+      margin-bottom: -10px;
+    }
+
+    #Bigbox2 {
+      /*overflow-wrap: break-word;
+        white-space: pre-wrap;*/
+      width: auto;
+      /* 각 박스의 너비 */
+      height: auto;
+      /* 각 박스의 높이 */
+    }
+
+    .Scont {
+      display: flex;
+      width: auto;
+      height: auto;
+    }
+
+    .Sbox {
+      width: auto;
+      height: auto;
+      margin-bottom: 5px;
+      margin-right: 15px;
+    }
+
+    #price {
+      width: auto;
+      height: auto;
+      text-align: center;
+    }
+  </style>
+
+  <body>
+    <button class="image-button" style="margin-top: -5px">
+      <div class="image-wrapper">
+        <img
+          src="../static/assets/img/logo.png"
+          alt="이미지 버튼"
+          onclick="location.href='./'"
+        />
+      </div>
+    </button>
+
+    <main>
+      <div id="upperBox">
+        <div id="Bigbox1">
+          <div class="result-container" style="padding: 70px">
+            <h2 style="margin-top: -20px" ;>Keyword Extraction</h2>
+            <hr style="margin-top: 6px" ; />
+            <div class="cont" id="box1">
+              <h3 style="margin-bottom: -5px">XLNet</h3>
+              <div class="Scont">
+                {% for list in XL_result %}
+                <div class="Sbox">
+                  {% for w in list %}
+                  <p>{{w}}</p>
+                  {% endfor %}
+                </div>
+                {% endfor %}
+              </div>
+              <hr />
+              <h3 style="margin-bottom: -2px">KeyBert</h3>
+              <div class="Scont">
+                {% for list in Bert_result %}
+                <div class="Sbox">
+                  {% for w in list %}
+                  <p>{{w}}</p>
+                  {% endfor %}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="Bigbox2">
+          <div class="result-container">
+            <h2 style="margin-top: -10px" ;>The 5 most similar games</h2>
+            <hr style="margin-top: 4px" ; />
+
+            {% for list in similar_games %}
+            <a style="font-weight: bold">&lt; {{list[0]}} &gt;</a>
+            <div style="margin-bottom: 2px" ;></div>
+            ID : {{list[1]}}
+            <div style="margin-bottom: 2px" ;></div>
+            Link : <a href="{{list[2]}}{{list[1]}}">{{list[2]}}{{list[1]}}</a>
+            <hr style="margin-top: 4px" ; />
+            {% endfor %}
+          </div>
+          <div id="price">
+            <div class="result-container">
+              <h2 style="margin-top: -15px">Recommended Price</h2>
+
+              <h3 style="margin-bottom: -10px">${{ predicted_price }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
